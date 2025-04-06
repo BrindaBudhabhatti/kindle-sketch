@@ -1,140 +1,16 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Scribl Lite</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      margin: 0;
-      background: #fff;
-      touch-action: none;
-    }
-
-    #canvas {
-      display: block;
-      width: 100vw;
-      height: 100vh;
-      background-color: #ffffff;
-      touch-action: none;
-    }
-
-    .toolbar {
-      position: fixed;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #222;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 10px;
-      display: flex;
-      gap: 10px;
-    }
-
-    button {
-      background: #444;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      font-size: 14px;
-      border-radius: 5px;
-    }
-
-    input[type="color"] {
-      height: 30px;
-      width: 30px;
-      border: none;
-      padding: 0;
-    }
-
-    input[type="range"] {
-      width: 80px;
-    }
-  </style>
-</head>
-<body>
-  <canvas id="canvas"></canvas>
-
-  <div class="toolbar">
-    <input type="color" id="colorPicker">
-    <input type="range" id="lineWidth" min="1" max="10" value="2">
-    <button onclick="clearCanvas()">Clear</button>
-  </div>
-
-  <script>
-    var canvas = document.getElementById("canvas");
-    var ctx = canvas.getContext("2d");
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-
-    var drawing = false;
-    var color = "#000000";
-    var lineWidth = 2;
-
-    document.getElementById("colorPicker").onchange = function() {
-      color = this.value;
-    };
-
-    document.getElementById("lineWidth").oninput = function() {
-      lineWidth = this.value;
-    };
-
-    function getXY(e) {
-      var rect = canvas.getBoundingClientRect();
-      if (e.touches) {
-        return {
-          x: e.touches[0].clientX - rect.left,
-          y: e.touches[0].clientY - rect.top
-        };
-      } else {
-        return {
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top
-        };
+  <head><title>Canvas Test</title></head>
+  <body>
+    <script>
+      window.onload = function () {
+        var c = document.createElement('canvas');
+        if (c.getContext && c.getContext('2d')) {
+          document.body.innerHTML = "<h1 style='color:green;'>Canvas is supported 🎉</h1>";
+        } else {
+          document.body.innerHTML = "<h1 style='color:red;'>Canvas NOT supported ❌</h1>";
+        }
       }
-    }
-
-    function startDraw(e) {
-      drawing = true;
-      var pos = getXY(e);
-      ctx.beginPath();
-      ctx.moveTo(pos.x, pos.y);
-      e.preventDefault();
-    }
-
-    function draw(e) {
-      if (!drawing) return;
-      var pos = getXY(e);
-      ctx.lineTo(pos.x, pos.y);
-      ctx.strokeStyle = color;
-      ctx.lineWidth = lineWidth;
-      ctx.lineCap = "round";
-      ctx.stroke();
-      e.preventDefault();
-    }
-
-    function stopDraw() {
-      drawing = false;
-    }
-
-    canvas.addEventListener("mousedown", startDraw);
-    canvas.addEventListener("mousemove", draw);
-    canvas.addEventListener("mouseup", stopDraw);
-    canvas.addEventListener("mouseout", stopDraw);
-
-    canvas.addEventListener("touchstart", startDraw);
-    canvas.addEventListener("touchmove", draw);
-    canvas.addEventListener("touchend", stopDraw);
-
-    function clearCanvas() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-  </script>
-</body>
+    </script>
+  </body>
 </html>
