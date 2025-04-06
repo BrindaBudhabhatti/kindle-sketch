@@ -14,7 +14,7 @@
     canvas {
       display: block;
       background-color: #fff;
-      touch-action: none;
+      touch-action: none; /* SUPER IMPORTANT */
     }
 
     #toolbar {
@@ -70,11 +70,11 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    document.getElementById('colorPicker').onchange = function() {
+    document.getElementById('colorPicker').onchange = function () {
       color = this.value;
     };
 
-    document.getElementById('lineWidth').oninput = function() {
+    document.getElementById('lineWidth').oninput = function () {
       lineWidth = this.value;
     };
 
@@ -120,12 +120,17 @@
       e.preventDefault();
     }
 
+    // Prevent Kindle scroll during touch
+    canvas.addEventListener('touchmove', function (e) {
+      e.preventDefault();
+    }, { passive: false });
+
     // Touch Events
     canvas.addEventListener('touchstart', startDrawing);
     canvas.addEventListener('touchmove', draw);
     canvas.addEventListener('touchend', stopDrawing);
 
-    // Mouse Events (fallback for laptop)
+    // Mouse Events (for laptop testing)
     canvas.addEventListener('mousedown', startDrawing);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', stopDrawing);
